@@ -15,13 +15,13 @@ Status code: 200 OK
 ```
 ```
 ---In4mo Shopping Center---
-       Date: 2020-04-24
-     Price of each item    
+     Date: 2020-04-24
+     Price of each item
 ----------------------------
- Apple  x 1 : 0.25€
- Orange x 1 : 0.3€
- Banana x 1 : 0.15€
- Papaya x 1 : 0.5€
+ Apple  x 1 : 25¢
+ Orange x 1 : 30¢
+ Banana x 1 : 15¢
+ Papaya x 1 : 50¢
  Promotion on papaya: Buy 3 in price of 2 : 1€
  ```
 
