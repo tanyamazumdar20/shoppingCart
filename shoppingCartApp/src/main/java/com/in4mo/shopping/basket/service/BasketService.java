@@ -40,31 +40,21 @@ public class BasketService {
     @Value("${papayas.three.price.of.two}")
     private BigDecimal priceOfThreePapayasInCostOfTwo;
 
-    private static final String PRICE_PER_APPLE = "Apples";
-    private static final String PRICE_PER_ORANGE = "Oranges";
-    private static final String PRICE_PER_BANANA = "Bananas";
-    private static final String PRICE_PER_PAPAYA = "Papaya";
-    private static final String PRICE_PAPAYA_PROMO = "Papayas";
-    private static final String LIST_OF_ITEMS_IN_SHOP = "---%s---" +
-            "%n     Date: %s" +
-            "%n     Price of each item" +
-            "%n----------------------------" +
-            "%n Apple  x 1 : %s¢" +
-            "%n Orange x 1 : %s¢" +
-            "%n Banana x 1 : %s¢" +
-            "%n Papaya x 1 : %s¢" +
-            "%n Promotion on papaya: Buy 3 in price of 2 : %s€";
+    private static final String KEY_APPLE = "Apples";
+    private static final String KEY_ORANGE = "Oranges";
+    private static final String KEY_BANANA = "Bananas";
+    private static final String KEY_PAPAYA = "Papaya";
+    private static final String KEY_PAPAYA_PROMO = "Papayas";
 
     private static final BigDecimal numberHundred = new BigDecimal(100);
 
     private Basket getItemPriceFromProperties() {
-
         Map<String, BigDecimal> fruitPriceMap = new HashMap<>();
-        fruitPriceMap.put(PRICE_PER_APPLE, priceOfOneApple.divide(numberHundred));
-        fruitPriceMap.put(PRICE_PER_ORANGE, priceOfOneOrange.divide(numberHundred));
-        fruitPriceMap.put(PRICE_PER_BANANA, priceOfOneBanana.divide(numberHundred));
-        fruitPriceMap.put(PRICE_PER_PAPAYA, priceOfOnePapaya.divide(numberHundred));
-        fruitPriceMap.put(PRICE_PAPAYA_PROMO, priceOfThreePapayasInCostOfTwo.divide(numberHundred));
+        fruitPriceMap.put(KEY_APPLE, priceOfOneApple.divide(numberHundred));
+        fruitPriceMap.put(KEY_ORANGE, priceOfOneOrange.divide(numberHundred));
+        fruitPriceMap.put(KEY_BANANA, priceOfOneBanana.divide(numberHundred));
+        fruitPriceMap.put(KEY_PAPAYA, priceOfOnePapaya.divide(numberHundred));
+        fruitPriceMap.put(KEY_PAPAYA_PROMO, priceOfThreePapayasInCostOfTwo.divide(numberHundred));
         return new Basket(fruitPriceMap);
     }
 
@@ -77,19 +67,17 @@ public class BasketService {
                 .append(String.format("%n Orange x 1 : %s¢", priceOfOneOrange))
                 .append(String.format("%n Banana x 1 : %s¢", priceOfOneBanana))
                 .append(String.format("%n Papaya x 1 : %s¢", priceOfOnePapaya))
-                .append(String.format("%n Promotion on papaya: Buy 3 in price of 2 : %s€", priceOfThreePapayasInCostOfTwo));
+                .append(String.format("%n Promotion on papaya: Buy 3 in price of 2 : %s€", priceOfThreePapayasInCostOfTwo.divide(numberHundred)));
         return list.toString();
     }
 
     public String getReceiptAfterCalculation(PurchasedItems noOfItems) {
-
-        Map<String, BigDecimal> itemsPurchasedMap = new HashMap<>();
-        itemsPurchasedMap.put(PRICE_PER_APPLE, noOfItems.getNumberOfApples());
-        itemsPurchasedMap.put(PRICE_PER_ORANGE, noOfItems.getNumberOfOranges());
-        itemsPurchasedMap.put(PRICE_PER_BANANA, noOfItems.getNumberOfBananas());
-        itemsPurchasedMap.put(PRICE_PAPAYA_PROMO, noOfItems.getNumberOfPapayas());
-
         validationOfNumberOfItemsInput(noOfItems);
+        Map<String, BigDecimal> itemsPurchasedMap = new HashMap<>();
+        itemsPurchasedMap.put(KEY_APPLE, noOfItems.getNumberOfApples());
+        itemsPurchasedMap.put(KEY_ORANGE, noOfItems.getNumberOfOranges());
+        itemsPurchasedMap.put(KEY_BANANA, noOfItems.getNumberOfBananas());
+        itemsPurchasedMap.put(KEY_PAPAYA_PROMO, noOfItems.getNumberOfPapayas());
 
         StringBuilder receipt = new StringBuilder(String.format("---%s---", shop))
                 .append(String.format("%n     %s", street))
@@ -104,13 +92,13 @@ public class BasketService {
         for (Map.Entry<String, BigDecimal> entry : getItemPriceFromProperties().getFruitPriceMap().entrySet()) {
             String k = entry.getKey();
             BigDecimal v = entry.getValue();
-            if (k.equals(PRICE_PAPAYA_PROMO)) {
+            if (k.equals(KEY_PAPAYA_PROMO)) {
                 sum = sum.add(promotionCalculation(itemsPurchasedMap.get(k), priceOfOnePapaya.divide(numberHundred), v));
                 receipt.append(String.format("%n%s   %s x %s€       : %s€ ", k, itemsPurchasedMap.get(k),
                         priceOfOnePapaya.divide(numberHundred), promotionCalculation(itemsPurchasedMap.get(k), priceOfOnePapaya.divide(numberHundred), v)));
 
             } else {
-                if (!k.equals(PRICE_PER_PAPAYA)) {
+                if (!k.equals(KEY_PAPAYA)) {
                     sum = sum.add(itemsPurchasedMap.get(k).multiply(v));
                     receipt.append(String.format("%n%s    %s x %s€     : %s€ ", k, itemsPurchasedMap.get(k), v, itemsPurchasedMap.get(k).multiply(v)));
                 }
@@ -139,7 +127,6 @@ public class BasketService {
     }
 
     private void validationOfNumberOfItemsInput(PurchasedItems noOfItems) {
-
         if (noOfItems.getNumberOfApples() == null
                 && noOfItems.getNumberOfOranges() == null
                 && noOfItems.getNumberOfBananas() == null

@@ -17,11 +17,9 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -77,35 +75,6 @@ class BasketControllerTest {
         private static final BigDecimal priceOfOnePapaya = new BigDecimal("0.50");
         private static final BigDecimal priceOfThreePapayasInCostOfTwo = BigDecimal.ONE;
         private static final String shop = "In4mo Shopping Center";
-        private static final String street = "Leborska 3B";
-        private static final String pincode = "80-386 Gdansk";
-        private static final String nip = "NIP 123-456-56-88";
-        private static final String RECEIPT_OF_ITEMS = "---%s---" +
-                "%n     %s      " +
-                "%n     %s    " +
-                "%n     %s     " +
-                "%n     Date: %s" +
-                "%n-------------------------" +
-                "%n         Receipt         " +
-                "%n-------------------------" +
-                "%nApple  %s*%s€ : %s€ " +
-                "%nOrange %s*%s€ : %s€ " +
-                "%nBanana %s*%s€ : %s€ " +
-                "%nPapaya %s*%s€ : %s€ " +
-                "%n==========================" +
-                "%nTotal Price: %s€";
-        private static final String responseTotalPrice = String.format(
-                RECEIPT_OF_ITEMS,
-                shop,
-                street,
-                pincode,
-                nip,
-                LocalDate.now(),
-                new BigDecimal(2), priceOfOneApple, new BigDecimal(0.50).setScale(2, RoundingMode.HALF_EVEN),
-                new BigDecimal(3), priceOfOneOrange, new BigDecimal(0.9).setScale(1, RoundingMode.HALF_EVEN),
-                BigDecimal.ONE, priceOfOneBanana, new BigDecimal(0.15).setScale(2, RoundingMode.HALF_EVEN),
-                new BigDecimal(5), priceOfOnePapaya, new BigDecimal(2.0).setScale(1, RoundingMode.HALF_EVEN),
-                new BigDecimal(3.55).setScale(2, RoundingMode.HALF_EVEN));
 
         private static final String LIST_OF_ITEMS_IN_SHOP = "---%s---" +
                 "%n     Date: %s" +
